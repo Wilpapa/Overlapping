@@ -175,7 +175,7 @@ setocc=
                               if (level in levels) { levels[level]=levels[level]+1; }
                       else {levels[level]=0;}
                       }
-                      doc["tariffLevel"]=levels[level];
+                      doc["level"]=level+"'".repeat(levels[level]);
             });
             return res;                  
          },
@@ -189,3 +189,5 @@ unwindfinal={$unwind:"$tariff"}
 pipeline=[project,unwind,group,sort,match,regroup,setocc,project2,unwindfinal]
 db.overlap.aggregate(pipeline) 
 ```
+
+Same output as above :
