@@ -27,7 +27,7 @@
 #{ "_id" : ISODate("2020-02-02T00:00:00Z"), "tariffLevel" : "B'" }
 #{ "_id" : ISODate("2020-02-03T00:00:00Z"), "tariffLevel" : "A'" }
 
-# guillaume@mongodb.com 20200630
+# guillaume at mongodb.com 20200630 ($project stage by Sylvain Chambon)
 
 from datetime import datetime
 import pymongo
