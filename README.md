@@ -158,11 +158,11 @@ project = {$project: { "tariff":1,"level":1,"days":dateMap}}
 unwind = {$unwind: "$days"}
 group = {$group: { "_id":"$days","tariffLevel":{$max:"$level"}}}
 sort = {$sort:{"_id":1}}
-match = {$match:{_id:{$gte:ISODate("2020-01-15T00:00:00Z"),$lte:ISODate("2020-03-15T00:00:00Z")}}}
-regroup={$group:{_id:"1",tariffs:{$push:{day:"$_id",level:"$tariffLevel"}}}}
+match = {$match:{"_id":{$gte:ISODate("2020-01-15T00:00:00Z"),$lte:ISODate("2020-03-15T00:00:00Z")}}}
+regroup={$group:{"_id":"1","tariffs":{$push:{"day":"$_id","level":"$tariffLevel"}}}}
 setocc=
 {$addFields:
-  {tariff:
+  {"tariff":
     {$function:
         {
            body: function(res) {
@@ -184,9 +184,9 @@ setocc=
           }
         }
 }}
-project2={$project:{_id:0,tariff:1}}
+project2={$project:{"_id:0","tariff":1}}
 unwindfinal={$unwind:"$tariff"}
-project3={$project:{_id:"$tariff.day",tariffLevel:"$tariff.level"}}
+project3={$project:{"_id":"$tariff.day","tariffLevel":"$tariff.level"}}
 pipeline=[project,unwind,group,sort,match,regroup,setocc,project2,unwindfinal,project3]
 db.overlap.aggregate(pipeline) 
 ```
