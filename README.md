@@ -1,8 +1,13 @@
 # About this repo
  
  This repo is a lab to prove the MongoDB aggregation framework capacities, taking advantage of predicate pushdown to solve complex problems without having to write code or to loop data back and forth between the application and the database. It reads a MongoDB database for a list of tariffs over a period of time and returns the higher tariff level for each day in the date range.
+ 
+There are 2 versions of the code :
 
-__Notes__ : as often with complex aggregation pipeline (and maximal pushdown), this code _is not_ compatible with CosmosDB API for MongoDB. $map is not a supported feature at the time of writing, and CosmosDB API for MongoDB doesn't support $match anywhere else than in 1st position in the pipeline.
+__MongoDB 4.2 and earlier__ : needs the python code, that will run the query and transform the data (to mark re-occurences of an already used tariff)
+__MongoDB 4.4 and later__ : all the code is run in a single aggregation pipeline, using the new $function (custom aggregation function) feature
+
+__Notes__ : as often with complex aggregation pipeline (and maximal pushdown), all code presented _is not_ compatible with CosmosDB API for MongoDB. $map is not a supported feature at the time of writing, and CosmosDB API for MongoDB doesn't support $match anywhere else than in 1st position in the pipeline. CosmosDB also does not support the $function feature of MongoDB 4.4
  
  # Create test data (sample)
  
@@ -41,7 +46,7 @@ The result should be :
 
 so tariff level list is ABCA. By convention, any re-appearing tariff level should have a different name (A',A'', etc.) - so we should have ABCA'
 
-# MongoDB aggregation pipeline
+# MongoDB aggregation pipeline for MongoDB 4.2 and earlier
 
 In order to get the higher tariff level for each day (not yet taking care of reappearing tariff level notation A'), we can use the $map feature along with the $range. By switching dates to EPOCH value, computing range per slice of 1 day ($range) and multiplying each result again by the number of milliseconds in a day - 86 400 000 - ($map) :
 
@@ -63,7 +68,7 @@ pipeline=[project,unwind,group,sort,match]
 db.overlap.aggregate(pipeline) 
 ```
 
-# Python code to compute A',A'', etc.
+# Python code to compute A',A'', etc. (tariff re-occurence) for MongoDB 4.2 and earlier
 
 The python code wraps the aggregation pipeline and processes the output : each time a tariff level appears, it calculates the repetition number (0 for the first appearance).
 Each tariff level is then stored by in the result adding as many single quote "'" as appeareances.
@@ -135,3 +140,52 @@ The end result for this sample is then :
 ```
 
 Notice the A' in the last 5 lines
+
+# Aggregation pipeline for full database pushdown using MongoDB 4.4
+
+with MongoDB 4.4 customer aggregation functions ($function), it's possible to get the same result in a single pipeline, without additional code to post-process:
+
+```
+dateMap =  {$map: {
+   input: { $range: [
+     {$floor: {$divide: [{$toLong: "$start"}, 86400000]}},
+     {$add: [{$floor: {$divide: [{$toLong: "$end"}, 86400000]}}, 1]}
+   ]},
+   as: "d",
+   in: { $toDate: {$multiply: ["$$d", 86400000]}}
+ }}
+project = {$project: { "tariff":1,"level":1,"days":dateMap}}
+unwind = {$unwind: "$days"}
+group = {$group: { "_id":"$days","tariffLevel":{$max:"$level"}}}
+sort = {$sort:{"_id":1}}
+match = {$match:{_id:{$gte:ISODate("2020-01-15T00:00:00Z"),$lte:ISODate("2020-03-15T00:00:00Z")}}}
+regroup={$group:{_id:"1",tariffs:{$push:{day:"$_id",level:"$tariffLevel"}}}}
+setocc=
+{$addFields:
+  {tariff:
+    {$function:
+        {
+           body: function(res) {
+      levels={};
+      firstLevel="";
+      res.forEach((doc) => {
+                 level=doc["level"];
+                 if (level!=firstLevel) {
+                         firstLevel=level;
+                         if (level in levels) { levels[level]=levels[level]+1; }
+            else {levels[level]=0;}
+         }
+                 doc["tariffLevel"]=levels[level];
+            });
+                 return res;                  
+        },
+           args: [ "$tariffs"],
+           lang: "js"
+          }
+        }
+}}
+project2={$project:{_id:0,tariff:1}}
+unwindfinal={$unwind:"$tariff"}
+pipeline=[project,unwind,group,sort,match,regroup,setocc,project2,unwindfinal]
+db.overlap.aggregate(pipeline) 
+```
