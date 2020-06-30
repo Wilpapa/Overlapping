@@ -37,14 +37,7 @@ import string
 START_TIME = datetime.fromisoformat("2020-01-15")
 END_TIME = datetime.fromisoformat("2020-03-15")
 
-#array of tariffs levels
-levels={}
-indices=list(string.ascii_uppercase)
-for value in indices:
-    levels[value]=-1
-
-print(levels)
-
+# MongoDB aggregation pipeline to extract higher tariff level per day
 pipeline=[
         {
                 "$project" : {
@@ -124,6 +117,12 @@ pipeline=[
 connection = pymongo.MongoClient()
 res = list(connection.test.overlap.aggregate(pipeline))
 
+#array of tariffs levels
+levels={}
+indices=list(string.ascii_uppercase)
+for value in indices:
+    levels[value]=-1
+
 # Computes re-appearance of tariff level (A,A',A'', etc.)
 firstLevel=""
 for doc in res:
@@ -135,4 +134,3 @@ for doc in res:
     doc["tariffLevel"]=newLevel
     print(doc)
 
-print(levels)
