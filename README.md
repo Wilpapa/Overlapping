@@ -1,6 +1,6 @@
 # About this repo
  
- This repo is a lab to prove the MongoDB aggregation framework capacities, taking advantage of predicate pushdown to solve complex problems without having to write code or to loop data back and forth between the application and the database. It reads a MongoDB database for a list of tariffs over a period of time and returns the higher tariff level for each day in the date range.
+ This repo is a lab to prove the MongoDB aggregation framework capabilities, taking advantage of predicate pushdown to solve complex problems without having to write code or to loop data back and forth between the application and the database. It reads a MongoDB database for a list of tariffs over a period of time and returns the higher tariff level for each day in the date range.
  
 There are 2 versions of the code :
 
