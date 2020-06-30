@@ -143,7 +143,7 @@ Notice the A' in the last 5 lines
 
 # Aggregation pipeline for full database pushdown using MongoDB 4.4
 
-with MongoDB 4.4 customer aggregation functions ($function), it's possible to get the same result in a single pipeline, without additional code to post-process:
+with MongoDB 4.4 custom aggregation functions ($function), it's possible to get the same result in a single pipeline, without additional code to post-process:
 
 ```javascript
 dateMap =  {$map: {
@@ -166,19 +166,19 @@ setocc=
     {$function:
         {
            body: function(res) {
-      levels={};
-      firstLevel="";
-      res.forEach((doc) => {
-                 level=doc["level"];
-                 if (level!=firstLevel) {
-                         firstLevel=level;
-                         if (level in levels) { levels[level]=levels[level]+1; }
-            else {levels[level]=0;}
-         }
-                 doc["tariffLevel"]=levels[level];
+           levels={};
+           firstLevel="";
+           res.forEach((doc) => {
+                      level=doc["level"];
+                      if (level!=firstLevel) {
+                              firstLevel=level;
+                              if (level in levels) { levels[level]=levels[level]+1; }
+                      else {levels[level]=0;}
+                      }
+                      doc["tariffLevel"]=levels[level];
             });
-                 return res;                  
-        },
+            return res;                  
+         },
            args: [ "$tariffs"],
            lang: "js"
           }
