@@ -32,10 +32,10 @@ db.overlap.insertMany(doc)
 
 Let's compute the daily tariff level for each day between Jan, 15th 2020 and Mar, 15th 2020.
 The result should be :
-Level A between 1/15 and 1/31
-Level B between 2/1 and 2/14
-Level C between 2/15 and 3/10
-Level A again between 3/11 and 3/15
+* Level A between 1/15 and 1/31
+* Level B between 2/1 and 2/14
+* Level C between 2/15 and 3/10
+* Level A again between 3/11 and 3/15
 
 so tariff level list is ABCA. By convention, any re-appearing tariff level should have a different name (A',A'', etc.) - so we should have ABCA'
 
