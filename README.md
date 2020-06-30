@@ -145,7 +145,7 @@ Notice the A' in the last 5 lines
 
 with MongoDB 4.4 customer aggregation functions ($function), it's possible to get the same result in a single pipeline, without additional code to post-process:
 
-```
+```javascript
 dateMap =  {$map: {
    input: { $range: [
      {$floor: {$divide: [{$toLong: "$start"}, 86400000]}},
