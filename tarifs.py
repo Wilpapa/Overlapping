@@ -122,7 +122,7 @@ pipeline=[
 
 # Extract data for daily tariff level from  MongoDB
 connection = pymongo.MongoClient()
-res = list(connection.bollore.overlap.aggregate(pipeline))
+res = list(connection.test.overlap.aggregate(pipeline))
 
 # Computes re-appearance of tariff level (A,A',A'', etc.)
 firstLevel=""
