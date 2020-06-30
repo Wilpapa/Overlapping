@@ -254,4 +254,4 @@ Same output as above :
 { "_id" : ISODate("2020-03-13T00:00:00Z"), "tariffLevel" : "A'" }
 { "_id" : ISODate("2020-03-14T00:00:00Z"), "tariffLevel" : "A'" }
 ```
-                      else {levels[level]=0;}
+                   
