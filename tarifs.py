@@ -117,20 +117,14 @@ pipeline=[
 connection = pymongo.MongoClient()
 res = list(connection.test.overlap.aggregate(pipeline))
 
-#array of tariffs levels
-levels={}
-indices=list(string.ascii_uppercase)
-for value in indices:
-    levels[value]=-1
-
 # Computes re-appearance of tariff level (A,A',A'', etc.)
+levels={}
 firstLevel=""
 for doc in res:
-    level=doc["tariffLevel"]
-    if (level!=firstLevel):
-        levels[level]+=1
-        firstLevel=level
-    newLevel = level + "'"*levels[level]
-    doc["tariffLevel"]=newLevel
-    print(doc)
-
+        level=doc["tariffLevel"]
+        if (level!=firstLevel):
+                firstLevel=level
+                levels[level]=levels[level]+1 if level in levels else 0
+        doc["tariffLevel"]=level + "'"*levels[level]
+        print(doc)  
+        
