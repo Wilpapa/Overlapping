@@ -1,6 +1,8 @@
-# Overlapping
+# About this repo
  
- Reads a MongoDB database for a list of tariffs over a period of time and returns the higher tariff level for each day in the date range
+ This repo is a lab to prove the MongoDB aggregation framework capacities, taking advantage of predicate pushdown to solve complex problems without having to write code or to loop data back and forth between the application and the database. It reads a MongoDB database for a list of tariffs over a period of time and returns the higher tariff level for each day in the date range.
+
+__Notes__ : as often with complex aggregation pipeline (and maximal pushdown), this code _is not_ compatible with CosmosDB API for MongoDB. $map is not a supported feature at the time of writing, and CosmosDB API for MongoDB doesn't support $match anywhere else than in 1st position in the pipeline.
  
  # Create test data (sample)
  
