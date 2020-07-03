@@ -255,3 +255,17 @@ Same output as above :
 { "_id" : ISODate("2020-03-14T00:00:00Z"), "tariffLevel" : "A'" }
 ```
                    
+In case we need to list the tariffs per date interval, we can add another group stage :
+```javascript
+groupend={$group:{_id:"$tariffLevel",dateStart:{$min:"$_id"},dateEnd:{$max:"$_id"}}}
+pipeline2=[project,unwind,group,sort,match,regroup,setocc,project2,unwindfinal,project3,groupend]
+db.overlap.aggregate(pipeline2)
+```
+
+The result is then :
+```
+{ "_id" : "B", "dateStart" : ISODate("2020-02-01T00:00:00Z"), "dateEnd" : ISODate("2020-02-14T00:00:00Z") }
+{ "_id" : "A'", "dateStart" : ISODate("2020-03-11T00:00:00Z"), "dateEnd" : ISODate("2020-03-15T00:00:00Z") }
+{ "_id" : "A", "dateStart" : ISODate("2020-01-15T00:00:00Z"), "dateEnd" : ISODate("2020-01-31T00:00:00Z") }
+{ "_id" : "C", "dateStart" : ISODate("2020-02-15T00:00:00Z"), "dateEnd" : ISODate("2020-03-10T00:00:00Z") }
+```
