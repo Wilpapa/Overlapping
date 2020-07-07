@@ -255,7 +255,7 @@ Same output as above :
                    
 In case we need to list the policies per date interval, we can add another group stage :
 ```javascript
-groupend={$group:{_id:"$policiyLevel",dateStart:{$min:"$_id"},dateEnd:{$max:"$_id"}}}
+groupend={$group:{_id:"$policyLevel",dateStart:{$min:"$_id"},dateEnd:{$max:"$_id"}}}
 pipeline2=[project,unwind,group,sort,match,regroup,setocc,project2,unwindfinal,project3,groupend]
 db.policies.aggregate(pipeline2)
 ```
