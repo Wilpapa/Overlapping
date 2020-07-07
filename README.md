@@ -182,7 +182,7 @@ setocc=
           }
         }
 }}
-project2={$project:{"_id:0","policy":1}}
+project2={$project:{"_id":0,"policy":1}}
 unwindfinal={$unwind:"$policy"}
 project3={$project:{"_id":"$policy.day","policyLevel":"$policy.level"}}
 pipeline=[project,unwind,group,sort,match,regroup,setocc,project2,unwindfinal,project3]
@@ -190,7 +190,7 @@ db.policies.aggregate(pipeline)
 ```
 
 Same output as above :
-```
+```javascript
 { "_id" : ISODate("2020-01-15T00:00:00Z"), "policyLevel" : "A" }
 { "_id" : ISODate("2020-01-16T00:00:00Z"), "policyLevel" : "A" }
 { "_id" : ISODate("2020-01-17T00:00:00Z"), "policyLevel" : "A" }
