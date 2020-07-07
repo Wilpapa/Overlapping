@@ -1,6 +1,6 @@
-# extracts daily tariffs between 2 dates, from overlapping tariffs stored by dates intervals
+# extracts daily policies between 2 dates, from overlapping policies stored by dates intervals
 #
-# input data (bollore.overlap)
+# input data (test.policies)
 #{
 #        "_id" : ObjectId("5efb1138fdf7f9c40e35388a"),
 #        "start" : ISODate("2020-01-01T00:00:00Z"),
@@ -115,16 +115,15 @@ pipeline=[
 
 # Extract data for daily tariff level from  MongoDB
 connection = pymongo.MongoClient()
-res = list(connection.test.overlap.aggregate(pipeline))
+res = list(connection.test.policies.aggregate(pipeline))
 
 # Computes re-appearance of tariff level (A,A',A'', etc.)
 levels={}
 firstLevel=""
 for doc in res:
-        level=doc["tariffLevel"]
+        level=doc["policyLevel"]
         if (level!=firstLevel):
                 firstLevel=level
                 levels[level]=levels[level]+1 if level in levels else 0
-        doc["tariffLevel"]=level + "'"*levels[level]
-        print(doc)  
-        
+        doc["policyLevel"]=level + "'"*levels[level]
+        print(doc)      
