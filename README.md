@@ -67,7 +67,7 @@ pipeline=[project,unwind,group,sort,match]
 db.overlap.aggregate(pipeline) 
 ```
 
-# Python code to compute A',A'', etc. (tariff re-occurence) for MongoDB 4.2 and earlier
+# Python code to compute A',A'', etc. (policy re-occurence) for MongoDB 4.2 and earlier
 
 The python code wraps the aggregation pipeline and processes the output : each time a policy level appears, it calculates the repetition number (0 for the first appearance).
 Each policy level is then stored by in the result adding as many single quote "'" as appeareances.
