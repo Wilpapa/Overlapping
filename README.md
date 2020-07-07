@@ -1,6 +1,6 @@
 # About this repo
  
- This repo is a lab to prove the MongoDB aggregation framework capabilities, taking advantage of predicate pushdown to solve complex problems without having to write code or to loop data back and forth between the application and the database. It reads a MongoDB database for a list of policies over a period of time and returns the higher policy level for each day in the date range.
+ This repo is a lab to prove the MongoDB aggregation framework capabilities, taking advantage of predicate pushdown to solve complex problems without having to write code or to loop data back and forth between the application and the database. It reads a MongoDB database for a list of policies overlapping over a period of time and returns the higher policy level for each day in the date range.
  
 To make it even trickier, this rule is applied : if a policy reoccurs in time, it's named after A',A'',A''', etc.
  
