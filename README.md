@@ -6,7 +6,7 @@ To make it even trickier, this rule is applied : if a policy reoccurs in time, i
  
 There are 2 versions of the code :
 
-__MongoDB 4.2 and earlier__ : needs the python code, that will run the query and transform the data (to mark re-occurences of an already used policy)
+__MongoDB 4.2 and earlier__ : needs the python code, that will run the query and transform the data (to mark re-occurences of an already used policy)  
 __MongoDB 4.4 and later__ : all the code is run in a single aggregation pipeline, using the new $function (custom aggregation function) feature
 
 __Notes__ : as often with complex aggregation pipeline (and maximal pushdown), all code presented _is not_ compatible with CosmosDB API for MongoDB. $map is not a supported feature at the time of writing, and CosmosDB API for MongoDB doesn't support $match anywhere else than in 1st position in the pipeline. CosmosDB also does not support the $function feature of MongoDB 4.4
