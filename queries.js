@@ -44,6 +44,6 @@ project3={$project:{"_id":"$policy.day","policyLevel":"$policy.level"}}
 pipeline=[project,unwind,group,sort,match,regroup,setocc,project2,unwindfinal,project3]
 db.policies.aggregate(pipeline) 
 
-groupend={$group:{_id:"$policiyLevel",dateStart:{$min:"$_id"},dateEnd:{$max:"$_id"}}}
+groupend={$group:{_id:"$policyLevel",dateStart:{$min:"$_id"},dateEnd:{$max:"$_id"}}}
 pipeline2=[project,unwind,group,sort,match,regroup,setocc,project2,unwindfinal,project3,groupend]
 db.policies.aggregate(pipeline2)
