@@ -64,7 +64,7 @@ group = {$group: { "_id":"$days","policyLevel":{$max:"$level"}}}
 sort = {$sort:{"_id":1}}
 match = {$match:{_id:{$gte:ISODate("2020-01-15T00:00:00Z"),$lte:ISODate("2020-03-15T00:00:00Z")}}}
 pipeline=[project,unwind,group,sort,match]
-db.overlap.aggregate(pipeline) 
+db.policies.aggregate(pipeline) 
 ```
 
 # Python code to compute A',A'', etc. (policy re-occurence) for MongoDB 4.2 and earlier
